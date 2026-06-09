@@ -2,19 +2,20 @@
 
 An immersive, high-performance interactive web dossier showcasing the design & engineering work of **SANI VARADA**, AI/ML Architect & Quantitative Analyst. 
 
-This website features a high-contrast, professional white and blue visual theme built using Next.js 16 (App Router, Turbopack) and Tailwind CSS v4. The experience integrates dual scroll-jacking cinematic canvas engines, a 1000vh horizontal dossier layout, word-by-word scroll-driven text reveals, and a vertical scrolling sidebar with glassmorphic masking.
+This website features a high-contrast, professional white and blue visual theme built using Next.js 16 (App Router, Turbopack) and Tailwind CSS v4. The experience integrates dual scroll-jacking cinematic canvas engines, an 1100vh horizontal dossier layout, word-by-word scroll-driven text reveals, and a vertical scrolling sidebar with glassmorphic masking.
 
 ---
 
 ## 🚀 Key Features
 
 * **Dual Scroll-Driven Canvas Engines:** Implements high-performance HTML5 `<canvas>` rendering to scrub frame-by-frame through 240-frame 1080p animation sequences, optimized via state throttling and frame preloading.
-* **1000vh Dossier Layout:** Jacked vertical window scrolling translated into horizontal slide animations across 5 bespoke dossiers:
+* **1100vh Dossier Layout:** Jacked vertical window scrolling translated into horizontal slide animations across 6 bespoke dossiers:
   1. **Profile & Credentials:** Editorial profile layout featuring a responsive portrait, CSS-first grid systems, and core competencies list.
   2. **Personal Case Studies:** Detailed technical breakdowns of ML pipelines, RAG systems, and volatility forecasting models with an interactive tabbed layout.
   3. **Agency Case Studies (ML Arc):** Live client case studies mapping lead Qualification Voice Agents, CAC/ROAS optimizations, and support automation systems.
   4. **Quantitative Trading:** Deep dive into algorithmic trading, GARCH/LSTM volatility forecasting, index options regime detection, and the **Hermes Autonomous Agent** execution monitor.
-  5. **Downloads & Contact:** Integrated offline dossiers download links (PDF Curriculum Vitae & Agency Dossier) and high-contrast contact links.
+  5. **Lead Intake Portal:** Dedicated interactive contact dossier routing client parameters directly to Sani Varada.
+  6. **Downloads & Contact:** Integrated offline dossiers download links (PDF Curriculum Vitae & Agency Dossier) and high-contrast contact links.
 * **Word-by-Word Reveal Animation:** Leverages passive requestAnimationFrame window scroll calculations to reveal paragraph text sequentially as each slide enters the viewport.
 * **Vertical Marquee Sidebar:** A glassmorphic capsule containing scrolling social links moving in an upside-down vertical marquee loop, with hover-to-pause capability.
 * **Favicon Integration:** Custom Crisp SVG favicon utilizing Sani's monogram vector logo.

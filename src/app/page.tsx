@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { 
   ArrowRight, FileText, Mail, Shield, Zap, Sparkles, 
-  Cpu, TrendingUp, ChevronRight, Moon, Sun, ArrowLeftRight, Download, Phone
+  Cpu, TrendingUp, ChevronRight, Moon, Sun, ArrowLeftRight, Download, Phone, CheckCircle
 } from "lucide-react";
 import { 
   FaFacebook, FaInstagram, FaXTwitter, FaLinkedin, FaGlobe, FaCalendar, FaGithub 
@@ -38,6 +38,44 @@ export default function Home() {
   const [entered, setEntered] = useState(false);
   const [overlayOpacity, setOverlayOpacity] = useState(1);
   const [timeStr, setTimeStr] = useState("");
+
+  // Lead Intake Form States
+  const [leadFormData, setLeadFormData] = useState({ name: "", email: "", message: "" });
+  const [leadStatus, setLeadStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [leadError, setLeadError] = useState("");
+
+  const handleLeadChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setLeadFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleLeadSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!leadFormData.name || !leadFormData.email || !leadFormData.message) {
+      setLeadStatus("error");
+      setLeadError("Please fill out all required fields.");
+      return;
+    }
+    setLeadStatus("submitting");
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(leadFormData),
+      });
+      if (response.ok) {
+        setLeadStatus("success");
+        setLeadFormData({ name: "", email: "", message: "" });
+      } else {
+        const data = await response.json();
+        setLeadStatus("error");
+        setLeadError(data.error || "Submission failed. Please try again.");
+      }
+    } catch (err) {
+      setLeadStatus("error");
+      setLeadError("Network error. Please check your connection.");
+    }
+  };
 
   // Clock for the landing overlay
   useEffect(() => {
@@ -168,8 +206,8 @@ export default function Home() {
               const scrollDelta = scrollY - startScroll;
               const xOffset = viewportWidth - scrollDelta * (viewportWidth / viewportHeight);
               
-              // There are 5 panels, so max translation is -400vw (-4 * viewportWidth)
-              const maxSlide = -4 * viewportWidth;
+              // There are 6 panels, so max translation is -500vw (-5 * viewportWidth)
+              const maxSlide = -5 * viewportWidth;
               const clampedXOffset = Math.max(xOffset, maxSlide);
               
               sliderRef.current.style.transform = `translateX(${clampedXOffset}px)`;
@@ -452,7 +490,7 @@ export default function Home() {
 
       {/* SCROLLABLE DOSSIER LAYOUT */}
       {entered && (
-        <div className="relative w-full h-[1000vh] z-10">
+        <div className="relative w-full h-[1100vh] z-10">
           
           {/* SECTION 1 OVERLAYS (visible during vertical canvas scroll, fades out as Panel 1 enters) */}
           {overlayOpacity > 0 && (
@@ -472,7 +510,8 @@ export default function Home() {
                   <button onClick={() => scrollToVH(5.0)} className="hover:text-blue-600 transition-colors cursor-pointer">ABOUT</button>
                   <button onClick={() => scrollToVH(6.0)} className="hover:text-blue-600 transition-colors cursor-pointer">CASES</button>
                   <button onClick={() => scrollToVH(8.0)} className="hover:text-blue-600 transition-colors cursor-pointer">QUANT</button>
-                  <button onClick={() => scrollToVH(9.0)} className="hover:text-blue-600 transition-colors cursor-pointer">CONTACT</button>
+                  <button onClick={() => scrollToVH(9.0)} className="hover:text-blue-600 transition-colors cursor-pointer">INQUIRE</button>
+                  <button onClick={() => scrollToVH(10.0)} className="hover:text-blue-600 transition-colors cursor-pointer">CONTACT</button>
                 </nav>
                 <a 
                   href="https://calendly.com/imsunnystark/30min" 
@@ -604,7 +643,7 @@ export default function Home() {
           <div className="sticky top-0 left-0 w-full h-screen overflow-hidden bg-transparent z-10">
             <div 
               ref={sliderRef}
-              className="flex h-full w-[500vw] transition-transform duration-75 ease-out"
+              className="flex h-full w-[600vw] transition-transform duration-75 ease-out"
               style={{ transform: "translateX(100vw)" }}
             >
 
@@ -961,7 +1000,115 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* PANEL 5: DOWNLOADS & CONTACT */}
+              {/* PANEL 5: LEAD INTAKE FORM */}
+              <div className="w-screen h-screen flex-shrink-0 flex justify-center items-center px-6 md:px-24 py-16 bg-slate-50 border-r border-slate-100 overflow-y-auto no-scrollbar">
+                <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+                  
+                  {/* Left Column: Brief details */}
+                  <div className="md:col-span-5 space-y-6">
+                    <div>
+                      <span className="font-mono text-xs text-blue-600 uppercase tracking-widest block mb-1">&mdash; Dossier Intake</span>
+                      <h3 className="font-sans font-bold text-3xl tracking-tight text-slate-900 font-extrabold uppercase">Initiate Project</h3>
+                    </div>
+                    
+                    <p className="text-xs text-slate-600 leading-relaxed font-light">
+                      Submit your project parameters, system constraints, or quantitative directives. Your transmission will be securely routed directly to Sani Varada for architectural and resource scoping.
+                    </p>
+
+                    <div className="h-[1px] w-16 bg-blue-600/30" />
+
+                    <div className="space-y-2 font-mono text-[9px] text-slate-500 uppercase tracking-wider">
+                      <p><strong>Recipient:</strong> founder@mlarcai.com</p>
+                      <p><strong>Routing:</strong> Resend TLS Ingestion</p>
+                      <p><strong>Response SLA:</strong> &lt; 24 Hours</p>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Interactive Form */}
+                  <div className="md:col-span-7 bg-white border border-slate-200 p-6 sm:p-8 rounded-2xl shadow-lg">
+                    {leadStatus === "success" ? (
+                      <div className="text-center py-8 space-y-4">
+                        <CheckCircle className="w-12 h-12 text-blue-600 mx-auto animate-bounce" />
+                        <h4 className="font-serif text-lg font-semibold text-slate-955 uppercase tracking-wide">Transmission Complete</h4>
+                        <p className="text-xs text-slate-600 max-w-xs mx-auto font-light leading-relaxed">
+                          Your project credentials have been successfully formatted and routed. Expect a response window shortly.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setLeadStatus("idle")}
+                          className="px-5 py-2 border border-blue-600 rounded-full font-mono text-[9px] uppercase tracking-widest text-[#0f172a] hover:bg-blue-600 hover:text-white transition-all cursor-pointer"
+                        >
+                          New Transmission
+                        </button>
+                      </div>
+                    ) : (
+                      <form onSubmit={handleLeadSubmit} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-1">
+                            <label htmlFor="intake-name" className="block font-mono text-[8px] uppercase tracking-wider text-slate-400">Your Name *</label>
+                            <input
+                              type="text"
+                              id="intake-name"
+                              name="name"
+                              required
+                              disabled={leadStatus === "submitting"}
+                              value={leadFormData.name}
+                              onChange={handleLeadChange}
+                              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-blue-600 rounded-lg text-xs text-slate-800 outline-none transition-all"
+                              placeholder="Name"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label htmlFor="intake-email" className="block font-mono text-[8px] uppercase tracking-wider text-slate-400">Email Address *</label>
+                            <input
+                              type="email"
+                              id="intake-email"
+                              name="email"
+                              required
+                              disabled={leadStatus === "submitting"}
+                              value={leadFormData.email}
+                              onChange={handleLeadChange}
+                              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-blue-600 rounded-lg text-xs text-slate-800 outline-none transition-all"
+                              placeholder="email@domain.com"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          <label htmlFor="intake-message" className="block font-mono text-[8px] uppercase tracking-wider text-slate-400">Project Parameters & Directives *</label>
+                          <textarea
+                            id="intake-message"
+                            name="message"
+                            required
+                            rows={3}
+                            disabled={leadStatus === "submitting"}
+                            value={leadFormData.message}
+                            onChange={handleLeadChange}
+                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-blue-600 rounded-lg text-xs text-slate-800 outline-none transition-all resize-none"
+                            placeholder="Detail your system constraints, budget targets, or quantitative directives..."
+                          />
+                        </div>
+
+                        {leadStatus === "error" && (
+                          <div className="text-[10px] font-mono text-red-650 bg-red-50 p-2 rounded border border-red-200/50">
+                            {leadError}
+                          </div>
+                        )}
+
+                        <button
+                          type="submit"
+                          disabled={leadStatus === "submitting"}
+                          className="w-full flex items-center justify-center gap-2 py-2.5 bg-blue-600 hover:bg-blue-750 text-white rounded-lg font-mono text-[9px] uppercase tracking-widest shadow-sm transition-all cursor-pointer disabled:opacity-50"
+                        >
+                          {leadStatus === "submitting" ? "Transmitting..." : "Send Transmission"}
+                        </button>
+                      </form>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* PANEL 6: DOWNLOADS & CONTACT */}
               <div className="w-screen h-screen flex-shrink-0 flex justify-center items-center px-6 md:px-24 py-16 bg-white overflow-y-auto no-scrollbar">
                 <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-12">
                   <div className="space-y-8">
@@ -1013,10 +1160,10 @@ export default function Home() {
                       <h3 className="font-sans font-bold text-2xl tracking-tight text-slate-900">Initiate Contact</h3>
                     </div>
 
-                    <div className="space-y-3 font-mono text-xs">
+                    <div className="space-y-4 font-mono text-xs">
                       <a 
                         href="mailto:founder@mlarcai.com"
-                        className="flex items-center gap-3 text-slate-600 hover:text-blue-600 transition-colors"
+                        className="flex items-center gap-3 text-slate-650 hover:text-blue-600 transition-colors w-max"
                       >
                         <Mail className="w-4 h-4 text-blue-600" />
                         <span>founder@mlarcai.com</span>
@@ -1024,7 +1171,7 @@ export default function Home() {
 
                       <a 
                         href="tel:+917021628334"
-                        className="flex items-center gap-3 text-slate-600 hover:text-blue-600 transition-colors"
+                        className="flex items-center gap-3 text-slate-655 hover:text-blue-600 transition-colors w-max"
                       >
                         <Phone className="w-4 h-4 text-blue-600" />
                         <span>+91 70216 28334</span>
@@ -1034,7 +1181,7 @@ export default function Home() {
                         href="https://linkedin.com/in/sani-varada-845869176" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 text-slate-600 hover:text-blue-600 transition-colors"
+                        className="flex items-center gap-3 text-slate-650 hover:text-blue-600 transition-colors w-max"
                       >
                         <FaLinkedin className="w-4 h-4 text-blue-600" />
                         <span>linkedin.com/in/sani-varada-845869176</span>
@@ -1044,19 +1191,19 @@ export default function Home() {
                         href="https://github.com/Sani-varda" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 text-slate-600 hover:text-blue-600 transition-colors"
+                        className="flex items-center gap-3 text-slate-650 hover:text-blue-600 transition-colors w-max"
                       >
                         <FaGithub className="w-4 h-4 text-blue-600" />
                         <span>github.com/Sani-varda</span>
                       </a>
                     </div>
 
-                    <Link 
-                      href="/leadform"
+                    <button
+                      onClick={() => scrollToVH(9.0)}
                       className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-mono text-[9px] uppercase tracking-widest shadow-md transition-all w-max cursor-pointer"
                     >
                       Fill Intake Form <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
+                    </button>
 
                     <div className="border-t border-slate-200 pt-6 flex justify-between items-center text-slate-400 font-mono text-[9px] uppercase tracking-widest">
                       <div>
