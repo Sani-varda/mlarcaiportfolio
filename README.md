@@ -128,4 +128,3 @@ The vertical floating marquee utilizes a CSS `-webkit-mask-image` linear gradien
 
 ## 📄 License & Attribution
 * **Copyright:** &copy; 2026 SANI VARADA / ML Arc. All rights reserved.
-* **Credits:** Designed with premium cinematic longshot features and modern glassmorphic elements.

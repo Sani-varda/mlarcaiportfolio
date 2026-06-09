@@ -444,7 +444,7 @@ export default function Home() {
           </div>
 
           <div className="absolute bottom-12 font-mono text-[9px] uppercase tracking-[0.3em] text-slate-500">
-            Getty Persepolis &bull; Longshot Features Inspiration &bull; &copy; 2026
+            &copy; 2026
           </div>
         </main>
       )}
