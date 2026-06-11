@@ -1541,7 +1541,7 @@ export default function Home() {
 
                     <div className="space-y-2 font-mono text-[9px] text-slate-500 uppercase tracking-wider">
                       <p><strong className="text-slate-700">Recipient:</strong> founder@mlarcai.com</p>
-                      <p><strong className="text-slate-700">Routing:</strong> Resend TLS Ingestion</p>
+                      <p><strong className="text-slate-700">Routing:</strong> Secure Form Ingestion</p>
                       <p><strong className="text-slate-700">Response SLA:</strong> &lt; 24 Hours</p>
                     </div>
                   </div>

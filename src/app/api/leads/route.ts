@@ -55,55 +55,41 @@ export async function POST(request: Request) {
     console.log(`Message  : ${leadData.message}`);
     console.log("=========================================================\n");
 
-    // 3. If RESEND_API_KEY env variable is available, send email
-    const apiKey = process.env.RESEND_API_KEY;
-    if (apiKey) {
-      try {
-        const emailResponse = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
-          },
-          body: JSON.stringify({
-            from: "Leads <onboarding@resend.dev>",
-            to: "founder@mlarcai.com",
-            subject: `[ML Arc Portfolio Lead] - ${name} (${company || "Individual"})`,
-            html: `
-              <h2>New Lead Ingested via Portfolio Form</h2>
-              <p><strong>Timestamp:</strong> ${leadData.timestamp}</p>
-              <p><strong>Name:</strong> ${name}</p>
-              <p><strong>Email:</strong> ${email}</p>
-              <p><strong>Phone:</strong> ${phone || "N/A"}</p>
-              <p><strong>Company/Entity:</strong> ${company || "N/A"}</p>
-              <br />
-              <p><strong>Message / Scope:</strong></p>
-              <blockquote style="border-left: 3px solid #2563eb; padding-left: 15px; font-style: italic;">
-                ${message.replace(/\n/g, "<br />")}
-              </blockquote>
-            `,
-          }),
-        });
+    // 3. Send email via a free lead form service (FormSubmit.co)
+    const notificationEmail = process.env.LEAD_NOTIFICATION_EMAIL || "founder@mlarcai.com";
+    try {
+      const emailResponse = await fetch(`https://formsubmit.co/ajax/${notificationEmail}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          Name: name,
+          Email: email,
+          Phone: phone || "N/A",
+          Company: company || "N/A",
+          Message: message,
+          _subject: `[ML Arc Portfolio Lead] - ${name} (${company || "Individual"})`,
+        }),
+      });
 
-        if (!emailResponse.ok) {
-          const errBody = await emailResponse.text();
-          console.error("Resend API responded with error:", errBody);
-          return NextResponse.json({
-            success: true,
-            message: "Lead recorded locally, but email delivery service failed.",
-            warning: "Email transmission error.",
-          });
-        }
-      } catch (emailErr) {
-        console.error("Error sending email via Resend:", emailErr);
+      if (!emailResponse.ok) {
+        const errBody = await emailResponse.text();
+        console.error("FormSubmit API responded with error:", errBody);
         return NextResponse.json({
           success: true,
-          message: "Lead recorded locally, but email transmission failed.",
-          warning: "Email routing error.",
+          message: "Lead recorded locally, but email forwarding service failed.",
+          warning: "FormSubmit service error.",
         });
       }
-    } else {
-      console.warn("RESEND_API_KEY is not defined in environment variables. Skipped email transmission.");
+    } catch (emailErr) {
+      console.error("Error sending email via FormSubmit:", emailErr);
+      return NextResponse.json({
+        success: true,
+        message: "Lead recorded locally, but email forwarding failed.",
+        warning: "Network routing error.",
+      });
     }
 
     return NextResponse.json({ 

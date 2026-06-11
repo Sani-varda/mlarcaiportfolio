@@ -111,13 +111,13 @@ Before setting up the project locally, ensure you have:
 
 ## Environment Configuration
 
-To enable automated email routing for the Lead Intake Form, create a `.env.local` file in the root directory:
+To configure the email address where leads will be forwarded, create a `.env.local` file in the root directory:
 
 ```env
-RESEND_API_KEY=re_your_api_key
+LEAD_NOTIFICATION_EMAIL=founder@mlarcai.com
 ```
 
-*Note: If RESEND_API_KEY is not defined, leads will still be successfully saved locally inside /leads.json (git-ignored for security) and logged to the server terminal, so no submissions are lost during development.*
+*Note: If LEAD_NOTIFICATION_EMAIL is not defined, the forwarder defaults to founder@mlarcai.com. In addition, all submitted leads are automatically saved locally inside /leads.json (git-ignored for security) and logged to the server terminal, ensuring no submissions are lost.*
 
 ---
 
