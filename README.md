@@ -176,5 +176,30 @@ The vertical floating marquee utilizes a CSS -webkit-mask-image linear gradient 
 
 ---
 
+## Search Engine Verification & Submission
+
+To verify ownership and automatically submit your portfolio to search engines (Google and Bing) to rank faster:
+
+### 1. Site Verification Meta Tags
+The verification tokens in `src/app/layout.tsx` are configured to load from environment variables:
+* **Google Search Console:** `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`
+* **Bing Webmaster Tools:** `NEXT_PUBLIC_BING_SITE_VERIFICATION`
+
+Add these keys in your production environment variables (e.g. Vercel dashboard).
+
+### 2. Auto-Submission Script (IndexNow & Google Indexing)
+You can request immediate crawl indexing for your sitemap URLs using the built-in script:
+```bash
+npm run submit-indexing
+```
+* **Bing / Yandex (IndexNow):** The script automatically configures a verification key in your `public/` directory and submits your URLs. This is executed and confirmed instantly.
+* **Google Indexing API:**
+  1. Download your service account JSON key file from Google Cloud Console.
+  2. Save it as `service_account.json` in the root of this project.
+  3. Ensure the service account email is set as an Owner in Google Search Console.
+  4. Run the command to publish indexing updates.
+
+---
+
 ## License & Attribution
 * **Copyright:** Copyright 2026 SANI VARADA / ML Arc. All rights reserved.
