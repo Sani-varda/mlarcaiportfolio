@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   verification: {
-    google: "google-site-verification-token", // Replace with real token
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "google-site-verification-token",
     other: {
-      "msvalidate.01": "bing-site-verification-token", // Replace with real token
+      "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || "bing-site-verification-token",
     },
   },
   icons: {
