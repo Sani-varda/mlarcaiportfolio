@@ -125,8 +125,8 @@ export default function ImageSequenceCanvas({
           drawHeight = canvasWidth / imgRatio;
         }
 
-        // Scale image to 100% of calculated size (no border)
-        const scale = 1.0;
+        // Scale image to 90% of calculated size (no border)
+        const scale = 0.9;
         const finalWidth = drawWidth * scale;
         const finalHeight = drawHeight * scale;
 
@@ -166,7 +166,7 @@ export default function ImageSequenceCanvas({
   }, []);
 
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none select-none bg-white" style={{ zIndex: 1 }}>
+    <div className="absolute inset-0 w-full h-full pointer-events-none select-none bg-transparent" style={{ zIndex: 1 }}>
       <canvas ref={canvasRef} className="w-full h-full block opacity-100" />
     </div>
   );
