@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@font-face {
+  font-family: "FSP DEMO - PODIUM Sharp 4.11";
+  src: url("/fonts/podium-sharp.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-gold: #2563eb;          /* Primary Electric Blue */
   --color-gold-light: #1d4ed8;    /* Darker Accent Blue */

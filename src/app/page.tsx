@@ -45,6 +45,16 @@ export default function Home() {
   const [overlayOpacity, setOverlayOpacity] = useState(1);
   const [timeStr, setTimeStr] = useState("");
   const [vanguardMenuOpen, setVanguardMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Lead Intake Form States
   const [leadFormData, setLeadFormData] = useState({ name: "", email: "", message: "" });
@@ -95,6 +105,7 @@ export default function Home() {
 
   // Load Unicorn Studio for Vitruvian man animation in Panel 2
   useEffect(() => {
+    if (!entered || isMobile) return;
     const embedScript = document.createElement('script');
     embedScript.type = 'text/javascript';
     embedScript.textContent = `
@@ -165,7 +176,7 @@ export default function Home() {
         document.head.removeChild(style);
       } catch (e) {}
     };
-  }, []);
+  }, [entered, isMobile]);
 
 
   const scrollToVH = (vh: number) => {
@@ -673,47 +684,53 @@ export default function Home() {
     <div ref={containerRef} className="relative w-full min-h-screen bg-[#cbdbe6]">
       
       {/* Fixed Full-Screen Image Sequence Background */}
-      <div className="fixed inset-0 w-full h-full bg-[#cbdbe6] select-none pointer-events-none" style={{ zIndex: 1 }}>
-        {/* Sequence 1 (Active during initial vertical scroll) - Positioned on top */}
-        <div 
-          className="absolute inset-0 w-full h-full transition-opacity duration-300 ease-in-out"
-          style={{ 
-            opacity: seq1Opacity,
-            zIndex: scrollProgress < 1.0 ? 2 : 1
-          }}
-        >
-          <ImageSequenceCanvas 
-            scrollProgress={scrollProgress} 
-            totalFrames={240}
-            startFrame={1}
-            folder="/images/sequence2"
-            prefix="ezgif-frame-"
-            digits={3}
-            extension="png"
-            isActive={scrollProgress < 1.0}
-          />
-        </div>
+      {entered && !isMobile && (
+        <div className="fixed inset-0 w-full h-full bg-[#cbdbe6] select-none pointer-events-none" style={{ zIndex: 1 }}>
+          {/* Sequence 1 (Active during initial vertical scroll) - Positioned on top */}
+          {scrollProgress < 1.0 && (
+            <div 
+              className="absolute inset-0 w-full h-full transition-opacity duration-300 ease-in-out"
+              style={{ 
+                opacity: seq1Opacity,
+                zIndex: 2
+              }}
+            >
+              <ImageSequenceCanvas 
+                scrollProgress={scrollProgress} 
+                totalFrames={240}
+                startFrame={1}
+                folder="/images/sequence2"
+                prefix="ezgif-frame-"
+                digits={3}
+                extension="png"
+                isActive={scrollProgress < 1.0}
+              />
+            </div>
+          )}
 
-        {/* Sequence 2 (Active during horizontal dossier scroll) - Positioned underneath */}
-        <div 
-          className="absolute inset-0 w-full h-full transition-opacity duration-300 ease-in-out"
-          style={{ 
-            opacity: seq2Opacity,
-            zIndex: scrollProgress >= 1.0 ? 2 : 1
-          }}
-        >
-          <ImageSequenceCanvas 
-            scrollProgress={scrollProgress2} 
-            totalFrames={240}
-            startFrame={1}
-            folder="/images/sequence1"
-            prefix="ezgif-frame-"
-            digits={3}
-            extension="png"
-            isActive={scrollProgress >= 0.9}
-          />
+          {/* Sequence 2 (Active during horizontal dossier scroll) - Positioned underneath */}
+          {scrollProgress > 0.8 && (
+            <div 
+              className="absolute inset-0 w-full h-full transition-opacity duration-300 ease-in-out"
+              style={{ 
+                opacity: seq2Opacity,
+                zIndex: scrollProgress >= 1.0 ? 2 : 1
+              }}
+            >
+              <ImageSequenceCanvas 
+                scrollProgress={scrollProgress2} 
+                totalFrames={240}
+                startFrame={1}
+                folder="/images/sequence1"
+                prefix="ezgif-frame-"
+                digits={3}
+                extension="png"
+                isActive={scrollProgress >= 0.9}
+              />
+            </div>
+          )}
         </div>
-      </div>
+      )}
 
       {/* INTRO SCREEN OVERLAY */}
       {!entered && (
@@ -721,7 +738,7 @@ export default function Home() {
           {/* Background Portrait Image */}
           <div className="absolute inset-0 w-full h-full opacity-40">
             <Image 
-              src="/images/Cinematic_portrait_with_high-contrast_dual-tone_202606090312.jpeg" 
+              src="/images/background.webp" 
               alt="Sani Varada Cinematic Background" 
               fill
               priority

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter, Space_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -80,7 +81,6 @@ export default function RootLayout({
       className={`${playfair.variable} ${inter.variable} ${spaceMono.variable} antialiased`}
     >
       <head>
-        <link href="https://db.onlinewebfonts.com/c/8b75d9dcff6a48c35a46656192adf019?family=FSP+DEMO+-+PODIUM+Sharp+4.11" rel="stylesheet" type="text/css"/>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -128,7 +128,9 @@ export default function RootLayout({
           }}
         />
         {/* Google Tag Manager */}
-        <script
+        <Script
+          id="gtm-script"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -140,8 +142,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {/* End Google Tag Manager */}
 
         {/* Google tag (gtag.js) */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KMCSN3ZP90" />
-        <script
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-KMCSN3ZP90"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="ga-init-script"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
