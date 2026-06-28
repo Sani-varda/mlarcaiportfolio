@@ -7,8 +7,10 @@ const layersData = [
   { className: 'layer-6', speed: '120s', size: '222px', zIndex: 1, image: '6' },
   { className: 'layer-5', speed: '95s',  size: '311px', zIndex: 1, image: '5' },
   { className: 'layer-4', speed: '75s',  size: '468px', zIndex: 1, image: '4' },
-  { className: 'bike-1',  speed: '45s',  size: '75px',  zIndex: 2, image: 'bike', animation: 'parallax_bike', bottom: '100px', noRepeat: true },
-  { className: 'bike-2',  speed: '60s',  size: '75px',  zIndex: 2, image: 'bike', animation: 'parallax_bike', bottom: '100px', noRepeat: true },
+  { className: 'bike-1',  speed: '40s',  size: '75px',  zIndex: 2, image: 'bike', animation: 'parallax_bike', bottom: '100px', noRepeat: true, delay: '0s' },
+  { className: 'bike-2',  speed: '55s',  size: '70px',  zIndex: 2, image: 'bike', animation: 'parallax_bike', bottom: '98px',  noRepeat: true, delay: '12s' },
+  { className: 'bike-3',  speed: '70s',  size: '60px',  zIndex: 2, image: 'bike', animation: 'parallax_bike', bottom: '105px', noRepeat: true, delay: '6s' },
+  { className: 'bike-4',  speed: '48s',  size: '80px',  zIndex: 3, image: 'bike', animation: 'parallax_bike', bottom: '90px',  noRepeat: true, delay: '18s' },
   { className: 'layer-3', speed: '55s',  size: '158px', zIndex: 3, image: '3' },
   { className: 'layer-2', speed: '30s',  size: '145px', zIndex: 4, image: '2' },
   { className: 'layer-1', speed: '20s',  size: '136px', zIndex: 5, image: '1' },
@@ -29,6 +31,7 @@ const MountainVistaParallax: React.FC = () => {
             ${layer.animation ? `animation-name: ${layer.animation};` : ''}
             ${layer.bottom ? `bottom: ${layer.bottom};` : ''}
             ${layer.noRepeat ? 'background-repeat: no-repeat;' : ''}
+            ${layer.delay ? `animation-delay: ${layer.delay};` : ''}
           }
         `;
       })

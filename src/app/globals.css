@@ -263,10 +263,10 @@ body {
 
 @keyframes parallax_bike {
   0% {
-    background-position: -20vw 100%;
+    background-position: -10vw 100%;
   }
   100% {
-    background-position: 420vw 100%;
+    background-position: 610vw 100%;
   }
 }
 
